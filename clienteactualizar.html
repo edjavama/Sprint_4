@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Business Square</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    <div class="container-fluid my-5">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <h2>Actualizar Clientes</h2>
+                <form name="frm_clientes" role="form">
+                    <input type="hidden" name="txt_idcliente">
+                    <div class="form-group">
+                        <label for="exampleInputIdentClie">Numero de Identificacion</label>
+                        <input type="text" name="txt_identificacion" class="form-control" id="exampleInputIdentClie"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputNombreClie">Nombres</label>
+                        <input type="text" name="txt_nombre" class="form-control" id="exampleInputNombreClie" />
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputApellidoClie">Apellidos</label>
+                        <input type="text" name="txt_apellido" class="form-control" id="exampleInputApellidoClie" />
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmailClie">Correo Electronico</label>
+                        <input type="email" name="txt_email" class="form-control" id="exampleInputEmailClie" />
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputTelefonoClie">Numero Telefonico</label>
+                        <input type="tel" name="txt_telefono" class="form-control" id="exampleInputTelefonoClie" />
+                    </div>
+                    <div class="form-group my-3">
+                        <button type="button" onclick="clienteActualizar()" class="btn btn-primary">
+                            Actualizar <!--Metodo Put-->
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+    </div>
+  </body>
+  <!--Metodo Put-->
+  <script>
+    function clienteActualizar(){
+        console.log("Actualizando......")
+        //obtener datos
+        let numident_clie = document.frm_clientes.txt_identificacion.value
+        console.log(numident_clie)
+        let nombre_clie = document.frm_clientes.txt_nombre.value
+        console.log(nombre_clie)
+        let apellidos_clie = document.frm_clientes.txt_apellido.value
+        console.log(apellidos_clie)
+        let email_clie = document.frm_clientes.txt_email.value
+        console.log(email_clie)
+        let numtelf_clie = document.frm_clientes.txt_telefono.value
+        console.log(numtelf_clie)
+        let idcliente = document.frm_clientes.txt_idcliente.value
+        console.log(idcliente)
+
+        let cliente = {
+            "idcliente" : id,
+            "numident_clie" : numident_clie,
+            "nombre_clie" : nombre_clie,
+            "apellidos_clie" : apellidos_clie,
+            "email_clie" : email_clie,
+            "numtelf_clie" : numtelf_clie
+        }
+
+        let requestOptions = {
+            method : "PUT",
+            body : JSON.stringify(cliente),
+            headers : {"Content-Type" : "application/json"}
+        }
+
+        fetch("http://localhost:8080/cliente", requestOptions)
+        .then(Response => { console.log(Response)
+            if(Response.ok){
+                document.location = "clienteregistro.html"
+            }
+        })
+        .catch(error => console.log(error))
+    }
+    
+    //Obtener el idcliente como parametro y utilizar metodo Get
+    let params = new URLSearchParams(document.location.search);
+    console.log(params);
+    let id = params.get('id');
+    console.log(id);
+    fetch("http://localhost:8080/cliente/id?id="+ id)
+    .then(Response => Response.json())
+    .then(data => {console.log(data)
+        document.frm_clientes.txt_identificacion.value = data.numident_clie
+        document.frm_clientes.txt_nombre.value =data.nombre_clie
+        document.frm_clientes.txt_apellido.value = data.apellidos_clie
+        document.frm_clientes.txt_email.value = data.email_clie
+        document.frm_clientes.txt_telefono.value = data.numtelf_clie
+        document.frm_clientes.txt_idcliente.value = id
+    })
+    .catch(error => console.log(error))
+  </script>
+</html>
